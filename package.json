@@ -14,6 +14,11 @@
     "test:coverage": "nyc npm test"
   },
   "nyc": {
+    "check-coverage": true,
+    "lines": 50,
+    "statements": 50,
+    "functions": 50,
+    "branches": 50,
     "reporter": [
       "text",
       "html"
