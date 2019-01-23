@@ -77,10 +77,11 @@ describe('Spotify Wrapper', () => {
     });
 
     context('deal with the promise', () => {
-      it('should get a json from the resolved promise', () => {
-        const artist = search('Incubus', 'artist');
-        console.log('1', artist);
-        expect(artist).to.be.eql({ body: 'json' });
+      it('should get a json from the resolved promise', (done) => {
+        search('Incubus', 'artist').then(data => {
+          expect(data).to.be.eql({ body: 'json' });
+          done();
+        });
       });
     });
   });
