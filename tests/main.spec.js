@@ -3,6 +3,7 @@ import { describe, it } from 'mocha';
 import { search, searchAlbuns, searchArtits, searchPlaylist, searchTracks } from '../src/main';
 
 describe('Spotify Wrapper', () => {
+
   describe('Smoke tests', () => {
 
     it('should exists the search method', () => {
@@ -23,6 +24,13 @@ describe('Spotify Wrapper', () => {
 
     it('should exists the searchTracks method', () => {
       expect(searchTracks).to.exist;
+    });
+  });
+
+  describe('Generic search', () => {
+
+    it('should make a fetch request to the spotify api', () => {
+
     });
   });
 });
