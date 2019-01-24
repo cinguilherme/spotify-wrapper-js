@@ -85,4 +85,61 @@ describe('Spotify Wrapper', () => {
       });
     });
   });
+
+  describe('Album search', () => {
+    let fetchStub;
+    let promise;
+    beforeEach(() => {
+      fetchStub = sinon.stub(global, 'fetch');
+      promise = fetchStub.resolves({ body: 'json', album: 'lola' });
+    });
+    afterEach(() => {
+      fetchStub.restore();
+    });
+
+    it('should call fetch', () => {
+      searchAlbuns();
+      expect(fetchStub).to.be.calledOnce;
+    });
+
+    it('should call fetch with an url', () => {
+      searchAlbuns('Muse');
+      expect(fetchStub).to.be.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album');
+    });
+
+    context('albumSearch with promisse handled', () => {
+      it('should return a json from promise', async () => {
+        const album = await searchAlbuns('Muse');
+        expect(album).to.be.eql({ body: 'json', album: 'lola' });
+
+      });
+    });
+  });
+
+});
+
+describe('Artist Search', () => {
+  let fetchStub;
+  let promise;
+  beforeEach(() => {
+    fetchStub = sinon.stub(global, 'fetch');
+    promise = fetchStub.resolves({ body: 'json', album: 'lola' });
+  });
+  afterEach(() => {
+    fetchStub.restore();
+  });
+
+
+});
+
+describe('Playlist Search', () => {
+  let fetchStub;
+  let promise;
+  beforeEach(() => {
+    fetchStub = sinon.stub(global, 'fetch');
+    promise = fetchStub.resolves({ body: 'json', album: 'lola' });
+  });
+  afterEach(() => {
+    fetchStub.restore();
+  });
 });

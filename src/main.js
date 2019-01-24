@@ -2,10 +2,11 @@ const search = (artist = '', type = '') => {
   const processedType = type.split(',').join('%2C');
 
   return fetch(`https://api.spotify.com/v1/search?q=${artist}&type=${processedType}`)
-    .then(data => data).catch(err => console.log(err));
+    .catch(err => console.log(err));
 };
 
-const searchAlbuns = () => {
+const searchAlbuns = (album) => {
+  return fetch(`https://api.spotify.com/v1/search?q=${album}&type=album`);
 };
 
 const searchArtits = () => {
