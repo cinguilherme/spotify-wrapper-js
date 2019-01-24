@@ -159,7 +159,6 @@ describe('Spotify Wrapper', () => {
       searchTracks('Incubus');
       expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Incubus&type=track');
     });
-
   });
 });
 
