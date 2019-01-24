@@ -1,21 +1,34 @@
-const search = (artist = '', type = '') => {
-  const processedType = type.split(',').join('%2C');
+global.fetch = require('node-fetch');
 
-  // eslint-disable-next-line no-undef
-  return fetch(`https://api.spotify.com/v1/search?q=${artist}&type=${processedType}`);
+const oauth = 'BQDYMWEIVTiL6TrP17l58fX6oNfxZPE7O8QCLf3GCBp7t7km3-s_vW9Apn86zppvHfK_LLfigDU1tpQpTJ0a8cdBFL-HJU7ulSWRM8WppVMMVKozkgjCUjKbsi2JW9iyzn7duPNdoXJaPAX6BFbH';
+
+const processChunks = (body, callback) => {
+  const data = [];
+  const outbuff = body;
+  let obj = {};
+  outbuff.on('data', (chunk) => {
+    data.push(chunk);
+  }).on('end', () => {
+    const buffer = Buffer.concat(data);
+    obj = buffer.toString('utf-8');
+    callback(obj);
+  });
 };
 
-// eslint-disable-next-line no-undef
-const searchAlbuns = album => fetch(`https://api.spotify.com/v1/search?q=${album}&type=album`);
+const search = (artist = '', type = '') => {
+  const meta = {
+    'Authorization': 'Bearer ' + oauth,
+  };
+  const processedType = type.split(',').join('%2C');
 
+  return fetch(`https://api.spotify.com/v1/search?q=${artist}&type=${processedType}&limit=5&offset=2`, {
+    headers: meta,
+  });
+};
 
-// eslint-disable-next-line no-undef
-const searchArtits = artist => fetch(`https://api.spotify.com/v1/search?q=${artist}&type=artist`);
+const searchAlbuns = album => search(album, 'album');
+const searchArtits = artist => search(artist, 'artist');
+const searchPlaylist = query => search(query, 'playlist');
+const searchTracks = query => search(query, 'track');
 
-// eslint-disable-next-line no-undef
-const searchPlaylist = query => fetch(`https://api.spotify.com/v1/search?q=${query || ''}&type=playlist`);
-
-// eslint-disable-next-line no-undef
-const searchTracks = query => fetch(`https://api.spotify.com/v1/search?q=${query || ''}&type=track`);
-
-export { search, searchAlbuns, searchArtits, searchPlaylist, searchTracks };
+export { search, searchAlbuns, searchArtits, searchPlaylist, searchTracks, processChunks };
