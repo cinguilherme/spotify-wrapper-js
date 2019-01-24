@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 global.fetch = require('node-fetch');
 
 const oauth = 'BQDYMWEIVTiL6TrP17l58fX6oNfxZPE7O8QCLf3GCBp7t7km3-s_vW9Apn86zppvHfK_LLfigDU1tpQpTJ0a8cdBFL-HJU7ulSWRM8WppVMMVKozkgjCUjKbsi2JW9iyzn7duPNdoXJaPAX6BFbH';
@@ -17,7 +18,7 @@ const processChunks = (body, callback) => {
 
 const search = (artist = '', type = '') => {
   const meta = {
-    'Authorization': 'Bearer ' + oauth,
+    Authorization: `Bearer ${oauth}`,
   };
   const processedType = type.split(',').join('%2C');
 
