@@ -1,21 +1,20 @@
 const search = (artist = '', type = '') => {
   const processedType = type.split(',').join('%2C');
 
-  return fetch(`https://api.spotify.com/v1/search?q=${artist}&type=${processedType}`)
-    .catch(err => console.log(err));
+  // eslint-disable-next-line no-undef
+  return fetch(`https://api.spotify.com/v1/search?q=${artist}&type=${processedType}`);
 };
 
-const searchAlbuns = (album) => {
-  return fetch(`https://api.spotify.com/v1/search?q=${album}&type=album`);
-};
+// eslint-disable-next-line no-undef
+const searchAlbuns = album => fetch(`https://api.spotify.com/v1/search?q=${album}&type=album`);
 
-const searchArtits = () => {
-};
 
-const searchPlaylist = () => {
-};
+// eslint-disable-next-line no-undef
+const searchArtits = artist => fetch(`https://api.spotify.com/v1/search?q=${artist}&type=artist`);
 
-const searchTracks = () => {
-};
+// eslint-disable-next-line no-undef
+const searchPlaylist = query => fetch(`https://api.spotify.com/v1/search?q=${query || ''}&type=playlist`);
+
+const searchTracks = query => fetch(`https://api.spotify.com/v1/search?q=${query || ''}&type=track`);
 
 export { search, searchAlbuns, searchArtits, searchPlaylist, searchTracks };
