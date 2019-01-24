@@ -5,7 +5,7 @@ const doit = () => {
   prom.then((data) => {
     wrap.processChunks(data.body, (objs) => {
       // eslint-disable-next-line no-console
-      console.log('objs processed and displayed \n', JSON.parse(objs));
+      console.log('objs processed and displayed \n', objs.toString());
     });
   });
 };

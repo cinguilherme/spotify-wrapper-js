@@ -5,6 +5,7 @@ import { describe, it } from 'mocha';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import sinonStubPromise from 'sinon-stub-promise';
+import { Duplex } from 'stream';
 
 import { search, searchAlbuns, searchArtits, searchPlaylist, searchTracks } from '../src/main';
 
@@ -158,6 +159,49 @@ describe('Spotify Wrapper', () => {
     it('should call fetch with correct url for incubus tracks', () => {
       searchTracks('Incubus');
       expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Incubus&type=track&limit=5&offset=2');
+    });
+  });
+
+  describe('ProcessChunk section with more data', () => {
+    it('should call search with url that should have larger response', () => {
+      search('Muse', 'album,artist', 10, 5);
+      expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album%2Cartist&limit=10&offset=5');
+    });
+
+    it('should call search with a promise to a stream buffer', async () => {
+      const a = [];
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < 100; ++i) a[i] = `${i}`;
+      const buffer = Buffer.from(a);
+      const dup = new Duplex();
+      dup.push(buffer);
+      dup.push(null);
+
+      promise = fetchStub.resolves({ body: dup });
+      const pr = await search('Muse', 'album,artist', 10, 5);
+
+      expect(fetchStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Muse&type=album%2Cartist&limit=10&offset=5');
+      expect({ body: pr.body }).to.be.eql({ body: dup });
+    });
+
+    it('should know if the buffer is diferent', async () => {
+      const a = [];
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < 100; ++i) a[i] = `${i}`;
+
+      const buffer = Buffer.from(a);
+      const dup = new Duplex();
+      dup.push(buffer);
+      dup.push(null);
+      const diffenret = Buffer.from([1, 2, 3]);
+      const dup2 = new Duplex();
+      dup2.push(diffenret);
+      dup2.push(null);
+
+      promise = fetchStub.resolves({ body: dup });
+      const pr = await search('Muse', 'album,artist', 10, 5);
+
+      expect({ body: pr.body }).not.to.be.eql({ body: dup2 });
     });
   });
 });
